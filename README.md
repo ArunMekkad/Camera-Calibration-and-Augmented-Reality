@@ -2,9 +2,6 @@
 
 This repository contains implementation of camera calibration techniques and augmented reality applications using OpenCV, demonstrating the fundamental principles behind AR technology.
 
-## Walkthrough Video 
-https://drive.google.com/drive/folders/1Stjw9mMDEN360IHDJUDq_YbTjbY992HQ
-
 ## Overview
 
 This project implements various computer vision techniques to achieve augmented reality experiences. Starting with camera calibration to estimate camera parameters, the system can project 3D virtual objects onto ArUco markers and tracked objects in a video stream.
@@ -50,6 +47,109 @@ The system supports both single-marker detection and multiple markers arranged i
 ### 3D Point Cloud Rendering
 DepthAnything network is utilized to estimate depth information, which is combined with RGB data to create 3D point clouds (.pcd files) that can be visualized and projected onto AR markers.
 
+## Requirements
+
+- C++11 or later
+- OpenCV 4.x with contributed modules (for ArUco detection)
+- Point Cloud Library (PCL) for point cloud visualization
+- CMake 3.10 or later
+- A webcam or video input device
+
+## Installation & Usage
+
+### Prerequisites
+
+1. Install OpenCV with contrib modules:
+   ```bash
+   # Ubuntu/Debian
+   sudo apt update
+   sudo apt install libopencv-dev python3-opencv
+   sudo apt install libopencv-contrib-dev
+   
+   # For PCL
+   sudo apt install libpcl-dev pcl-tools
+   ```
+
+2. Print ArUco markers:
+   - Generate and print ArUco markers using the provided utility in `src/utils/generate_markers.cpp`
+   - Alternatively, use online ArUco marker generators with dictionary DICT_5X5_1000
+
+### Building the Project
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/username/calibration-augmented-reality.git
+   cd calibration-augmented-reality
+   ```
+
+2. Create a build directory:
+   ```bash
+   mkdir build
+   cd build
+   ```
+
+3. Build using CMake:
+   ```bash
+   cmake ..
+   make
+   ```
+
+### Running the Applications
+
+The project includes several executables in the `src` folder:
+
+1. **Camera Calibration**:
+   ```bash
+   ./calibration
+   ```
+   - Press 's' to save frames for calibration when ArUco markers are detected
+   - Press 'q' to quit the application
+   - After collecting enough frames, the calibration parameters will be saved to `camera_params.yml`
+
+2. **ArUco Detection and Axes Projection**:
+   ```bash
+   ./aruco_detection
+   ```
+   - Detects ArUco markers and projects coordinate axes
+
+3. **Virtual Object Projection**:
+   ```bash
+   ./virtual_object
+   ```
+   - Projects a tetrahedron on detected markers
+
+4. **OBJ Wireframe Rendering**:
+   ```bash
+   ./obj_renderer path_to_obj_file.obj
+   ```
+   - Loads and renders an OBJ file on detected markers
+
+5. **Face Detection AR**:
+   ```bash
+   ./face_ar
+   ```
+   - Detects faces and overlays virtual objects
+
+6. **Point Cloud Renderer**:
+   ```bash
+   ./pointcloud_renderer path_to_pointcloud.pcd
+   ```
+   - Loads and renders point clouds on detected markers
+
+### Folder Structure
+
+```
+src/
+├── calibration/            # Camera calibration code
+├── aruco/                  # ArUco marker detection
+├── augmentation/           # AR object projection
+├── face_detection/         # Face detection and tracking
+├── obj_renderer/           # OBJ file loading and rendering
+├── pointcloud/             # Point cloud processing
+├── utils/                  # Utility functions and tools
+└── main.cpp                # Main application entry point
+```
+
 ## Examples
 
 - ArUco marker detection with axes projection
@@ -58,17 +158,6 @@ DepthAnything network is utilized to estimate depth information, which is combin
 - AR hat placement on detected faces
 - Multi-marker grid support
 - 3D point cloud visualization and projection
-
-## Requirements
-
-- OpenCV (with ArUco module)
-- Point Cloud Library (PCL) for point cloud visualization
-- C++
-- DepthAnything network for depth estimation
-
-## Installation & Usage
-
-(Add your specific installation and usage instructions here)
 
 ## Acknowledgements
 
