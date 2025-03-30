@@ -93,63 +93,7 @@ DepthAnything network is utilized to estimate depth information, which is combin
    cmake ..
    make
    ```
-
-### Running the Applications
-
-The project includes several executables in the `src` folder:
-
-1. **Camera Calibration**:
-   ```bash
-   ./calibration
-   ```
-   - Press 's' to save frames for calibration when ArUco markers are detected
-   - Press 'q' to quit the application
-   - After collecting enough frames, the calibration parameters will be saved to `camera_params.yml`
-
-2. **ArUco Detection and Axes Projection**:
-   ```bash
-   ./aruco_detection
-   ```
-   - Detects ArUco markers and projects coordinate axes
-
-3. **Virtual Object Projection**:
-   ```bash
-   ./virtual_object
-   ```
-   - Projects a tetrahedron on detected markers
-
-4. **OBJ Wireframe Rendering**:
-   ```bash
-   ./obj_renderer path_to_obj_file.obj
-   ```
-   - Loads and renders an OBJ file on detected markers
-
-5. **Face Detection AR**:
-   ```bash
-   ./face_ar
-   ```
-   - Detects faces and overlays virtual objects
-
-6. **Point Cloud Renderer**:
-   ```bash
-   ./pointcloud_renderer path_to_pointcloud.pcd
-   ```
-   - Loads and renders point clouds on detected markers
-
-### Folder Structure
-
-```
-src/
-├── calibration/            # Camera calibration code
-├── aruco/                  # ArUco marker detection
-├── augmentation/           # AR object projection
-├── face_detection/         # Face detection and tracking
-├── obj_renderer/           # OBJ file loading and rendering
-├── pointcloud/             # Point cloud processing
-├── utils/                  # Utility functions and tools
-└── main.cpp                # Main application entry point
-```
-
+   
 ## Examples
 
 - ArUco marker detection with axes projection
