@@ -1,112 +1,89 @@
-# Calibration and Augmented Reality
-## Time travel days used : 1
-## Video link : https://drive.google.com/drive/folders/1Stjw9mMDEN360IHDJUDq_YbTjbY992HQ
+# Camera Calibration and Augmented Reality
 
-## 👥 Team Members
-1. **Yuyang Tian**
-2. **Arun Mekkad**
+This repository contains implementation of camera calibration techniques and augmented reality applications using OpenCV, demonstrating the fundamental principles behind AR technology.
 
-## 💻 Environment
-- **🖥️ Yuyang Tian**: macOS 10.13.1 + CLion + CMake
-- **🐧 Arun Mekkad**: Ubuntu 22.04 LTS + VS Code + CMake
+## Walkthrough Video 
+https://drive.google.com/drive/folders/1Stjw9mMDEN360IHDJUDq_YbTjbY992HQ
 
-### 📂 File Structure
-```
-Proj3/
-   ├── include/              # 📁 Header files
-   ├── src/                  # 📁 Source files - most of them are executables.
-   ├── markers               # 🖼️ Image set for camera calibration
-   ├── object                # 🪆 OBJ file and Point Cloud filefor 3D rendering
-   ├── CMakeLists.txt        # ⚙️ CMake build configuration
-   ├── README.md             # 📖 Project documentation
-```
-| **Filename**              | **Description**                                              |
-|---------------------------| ------------------------------------------------------------ |
-| `calibrate.cpp`           | Live-stream video application, enabling camera calibration   |
-| `augReality.cpp`          | Augmented reality with ArUco marker detection and 3D object rendering |
-| `featureDetect.cpp`       | Real-time SIFT feature detection with adjustable threshold   |
-| `depthImage.cpp`          | Generates a 3D point cloud from depth data                   |
-| `pcdUtil.h / pcdUtil.cpp` | Supports 3D Point Cloud generation/visualization logic       |
-| `pointCloudDisplay.cpp`   | Point cloud visualization from a PCD file using command-line input |
+## Overview
 
-## 📌 Instructions for Running Executables
+This project implements various computer vision techniques to achieve augmented reality experiences. Starting with camera calibration to estimate camera parameters, the system can project 3D virtual objects onto ArUco markers and tracked objects in a video stream.
 
-#### **1. calibration**
+## Features
 
-**Description**: ArUco Marker Detection and Camera Calibration
-- **Usage**:
-- Board Configuration:
-  
-  * At startup, you'll be prompted to enter the column count of your marker grid
-  * Press 'g' anytime to reset the column count if you switch to a different board layout
-  
-  ```
-  ./calibration
-  ```
+- **ArUco Marker Detection**: Utilizes DICT_5X5_1000 dictionary for robust marker detection
+- **Camera Calibration**: Estimates intrinsic and extrinsic camera parameters
+- **Pose Estimation**: Calculates camera position relative to detected markers
+- **Virtual Object Projection**: Projects various 3D objects onto markers
+- **SIFT Feature Detection**: Implements Scale-Invariant Feature Transform for robust corner detection
+- **Multiple Extensions**:
+  - 3D OBJ Wireframe Rendering
+  - Face Detection with AR Object Overlay
+  - Multi-Target Support
+  - 3D Point Cloud (.pcd) Rendering from Depth Images
 
-🔹 **Tasks**:
+## Implementation Details
 
-- **Task 1**: Aruco marker detection (default mode). Detected corners will be drawn and their size printed.
-- **Task 2**: Press **'s'** to save corner data for calibration.
-- **Task 3**: Press **'c'** after saving more than 5 images to generate the calibration matrix. Press **'w'** to write calibration parameters to a `.yml` file in the `../outputs` folder.
+### ArUco Marker Detection
+The system uses ArUco markers for target detection due to their asymmetric design and unique IDs, making them robust to different orientations. Detection is performed using OpenCV's `detectMarkers()` function.
 
-#### 2.augReality
+### Camera Calibration
+Camera calibration is performed using OpenCV's `calibrateCamera()` function to obtain the camera matrix and distortion coefficients, which are then stored in a .yml file for later use.
 
-**Description**: Utilizes camera calibration parameters to determine the camera pose and render various 3D elements
+### Pose Estimation
+The `solvePNP()` function is used to estimate the camera's position relative to detected markers, returning rotation and translation vectors that transform 3D points from the object coordinate frame to the camera coordinate frame.
 
-- **Usage**:
+### Virtual Object Projection
+Using the camera parameters and pose estimation, 3D objects are projected onto the 2D image plane using `projectPoints()`. The system can render tetrahedrons, wireframes of OBJ files, and other 3D structures.
 
-  ```
-  ./augReality <params_file_path> <pcd file>
-  Eg: ./augReality ../outputs/camera_params.yml ../obj/matcha.pcd
-  ```
+## Extensions
 
-🔹 **Tasks**:
+### OBJ Wireframe Rendering
+The system can load and render wireframes of 3D models from OBJ files, accurately positioned and oriented relative to ArUco markers in the scene.
 
-- **Task 4**: On running the above executable, the calibration parameters saved previously will be read and camera pose will be determined.
-- **Task 5**: Press **'p'** to toggle corner points display. Press **'a'** to toggle axes display.
-- **Task 6**: Press **'t'** to toggle tetrahedron display.
-- **Extension - OBJ loading** : Press **'o'** to toggle rendering of an OBJ file.
-- **Extension - Hat over faces** : Press **'f'** to toggle display of a 3D cone shaped hat    over detected faces.
-- **Extension - 3D Point Cloud** : Press **'c'** to toggle display of a 3D Point Cloud of a Matcha latte cup.
+### Face Detection AR
+Using Haar cascade classifiers for face detection, the system can overlay virtual objects (like a hat) on detected faces in real-time, similar to AR filters in social media applications.
 
-#### **3.featureDetection**
+### Multiple Target Support
+The system supports both single-marker detection and multiple markers arranged in a grid, with proper calculation of relative positions and spacing between markers.
 
-**Description:** Detects and displays corner points using Scale-Invariant Feature Transform (SIFT).
+### 3D Point Cloud Rendering
+DepthAnything network is utilized to estimate depth information, which is combined with RGB data to create 3D point clouds (.pcd files) that can be visualized and projected onto AR markers.
 
-* **Usage**:
+## Examples
 
-  ```
-  ./featureDetect
-  ```
+- ArUco marker detection with axes projection
+- Tetrahedron projection on markers
+- OBJ wireframe rendering (Pikachu, bed frame, cylinder)
+- AR hat placement on detected faces
+- Multi-marker grid support
+- 3D point cloud visualization and projection
 
-🔹**Task 7**:  Run the executeable and point the camera towards a pattern of interest to display the corner points detected using Scale-Invariant Feature Transform (SIFT)
+## Requirements
 
-### Extension for 3D point cloud
+- OpenCV (with ArUco module)
+- Point Cloud Library (PCL) for point cloud visualization
+- C++
+- DepthAnything network for depth estimation
 
-### 4. DepthImage
+## Installation & Usage
 
-**Description:** 
+(Add your specific installation and usage instructions here)
 
-1. Displays a **depth map** using **DepthAnything**.
+## Acknowledgements
 
-2. Generates a **3D point cloud** from video frames.
+- [OpenCV Calibration Tutorial](https://docs.opencv.org/4.x/dc/dbb/tutorial_py_calibration.html)
+- [OpenCV Calibration Documentation](https://docs.opencv.org/3.4/d9/d0c/group__calib3d.html)
+- [OpenCV Drawing Functions](https://docs.opencv.org/4.x/dc/da5/tutorial_py_drawing_functions.html)
+- [OpenGL Model Loading Tutorial](https://www.opengl-tutorial.org/beginners-tutorials/tutorial-7-model-loading/)
+- [OpenGL Tutorials](https://github.com/opengl-tutorials/ogl)
+- [ArUco Detector Documentation](https://docs.opencv.org/4.x/d2/d1a/classcv_1_1aruco_1_1ArucoDetector.html)
 
-3. Saves the **PCD file** for later visualization in `PointCloud` executable.
+## Authors
 
-* **Usage**:
+- Yuyang Tian
+- Arun Mekkad
 
-```
-./DepthImage <path to camera_params.yml>
-e.g.  ./DepthImage outputs/camera_0_params.yml
-```
+## License
 
-#### 5. PointCloud
-
-**Description**: Visualizes a **point cloud (PCD file)** using command-line input.
-
-* Usage:
-
-  ```
-  ./PointCloud <path_to_pcd_file>
-  ```
+MIT License
